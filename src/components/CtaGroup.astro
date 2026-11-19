@@ -1,0 +1,103 @@
+---
+/**
+ * Primary + secondary calls to action.
+ * - Primary: "Coming soon on the App Store" — a styled NON-link badge until
+ *   APP_STORE_URL is set in src/config.ts. Deliberately not Apple's badge artwork.
+ * - Secondary: TestFlight beta → TESTFLIGHT_URL, or /support/#beta while null.
+ */
+import Glyph from './Glyph.astro';
+import { APP_STORE_URL, TESTFLIGHT_URL, betaHref } from '../config';
+
+interface Props {
+  align?: 'start' | 'center';
+}
+const { align = 'start' } = Astro.props;
+const external = TESTFLIGHT_URL !== null;
+---
+
+<div class:list={['cta-group', align]}>
+  {
+    APP_STORE_URL ? (
+      <a class="store-badge live" href={APP_STORE_URL}>
+        <Glyph name="phone" class="badge-icon" />
+        <span>
+          <small>Download on the</small>
+          App Store
+        </span>
+      </a>
+    ) : (
+      <p class="store-badge" role="note">
+        <Glyph name="phone" class="badge-icon" />
+        <span>
+          <small>Coming soon on the</small>
+          App Store
+        </span>
+      </p>
+    )
+  }
+  <a class="btn btn-secondary beta" href={betaHref} {...(external ? { rel: 'noopener' } : {})}>
+    Join the TestFlight beta
+    <Glyph name="arrow" />
+  </a>
+</div>
+
+<style>
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .cta-group.center {
+    justify-content: center;
+  }
+  .store-badge {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 56px;
+    padding: 0.55rem 1.25rem 0.55rem 1rem;
+    border-radius: var(--radius-control);
+    /* Not Apple's badge artwork: a store-style pill in the app's own tokens. */
+    background: linear-gradient(180deg, #05060c, #0b0e1a);
+    color: var(--text-primary);
+    font-family: var(--font-rounded);
+    font-weight: 900;
+    font-size: 1.15rem;
+    line-height: 1.05;
+    text-decoration: none;
+    box-shadow:
+      inset 0 0 0 1.5px rgb(199 210 254 / 0.45),
+      0 12px 34px -14px rgb(167 139 250 / 0.7);
+    cursor: default;
+  }
+  .store-badge small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-moon);
+  }
+  .store-badge.live {
+    cursor: pointer;
+  }
+  .store-badge :global(.badge-icon) {
+    color: var(--accent-primary);
+  }
+  .store-badge :global(.badge-icon) {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex: none;
+  }
+  .beta {
+    min-height: 56px;
+  }
+  @media (max-width: 420px) {
+    .cta-group > * {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

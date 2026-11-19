@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import nunitoWoff2 from '@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, absoluteUrl } from '../config';
+import type { JsonLd } from '../lib/jsonld';
+
+interface Props {
+  /** Page title; omitted on the home page. */
+  title?: string;
+  description?: string;
+  jsonLd?: JsonLd[];
+  noindex?: boolean;
+}
+
+const { title, description = SITE.description, jsonLd = [], noindex = false } = Astro.props;
+
+const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — the party game where your phone is the narrator`;
+const canonical = absoluteUrl(Astro.url.pathname);
+const ogImage = absoluteUrl(SITE.ogImage);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content={SITE.themeColor} />
+    {/* TODO(launch): Smart App Banner — set APP_STORE_ID in src/config.ts, then uncomment:
+    <meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} /> */}
+
+    <link rel="preload" href={nunitoWoff2} as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={SITE.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={SITE.ogImageAlt} />
+
+    {jsonLd.map((node) => <script type="application/ld+json" set:html={JSON.stringify(node)} />)}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Progressive enhancement only: content is fully visible without JS
+      // (hidden state applies under html.js) and with reduced motion.
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -6% 0px', threshold: 0.06 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+</style>

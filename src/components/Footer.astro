@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import appIcon from '../assets/images/app-icon.png';
+import { SITE } from '../config';
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <div class="about">
+      <a class="brand" href="/">
+        <Image src={appIcon} alt="" width={44} height={44} densities={[1, 2]} class="icon" />
+        <span>Trust Issues</span>
+      </a>
+      <p class="narrator">Everyone woke up. Suspiciously wholesome.</p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="/support/">Support</a></li>
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms of Use</a></li>
+        <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+      </ul>
+    </nav>
+    <div class="legal">
+      <p>© 2026 {SITE.company} · {SITE.author}. Made by <a href={SITE.companyUrl}>The Tech JAM</a>.</p>
+      <p>iPhone and App Store are trademarks of Apple Inc., registered in the U.S. and other countries.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-night-base);
+    border-top: 1px solid var(--rule);
+    padding-block: 3rem 2.5rem;
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+  }
+  .inner {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-rounded);
+    font-weight: 900;
+    font-size: 1.2rem;
+  }
+  .icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+  }
+  .about p {
+    margin-top: 0.75rem;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.1rem;
+    text-align: right;
+  }
+  ul a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  ul a:hover {
+    color: var(--text-primary);
+  }
+  .legal {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule);
+    padding-top: 1.5rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .legal a {
+    color: var(--text-secondary);
+  }
+  @media (max-width: 640px) {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+    ul {
+      text-align: left;
+    }
+  }
+</style>
