@@ -57,8 +57,8 @@ const deleteMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Iss
           <li><strong>Pass-and-play games</strong> stay on your device and aren’t sent to us.</li>
           <li><strong>No device permissions.</strong> No camera, microphone, contacts, photos or location.</li>
           <li>
-            <strong>Deletion:</strong> online game data is not deleted automatically yet. Email <a href={deleteMail}>{SITE.email}</a> and we’ll
-            delete it.
+            <strong>Deletion:</strong> online room data is deleted when the host ends the game, and expires 24 hours after the room is created
+            at the latest (it’s then removed automatically, typically within a day). You can also email <a href={deleteMail}>{SITE.email}</a>.
           </li>
         </ul>
       </aside>
@@ -106,7 +106,7 @@ const deleteMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Iss
               </tr>
               <tr>
                 <td data-label="Data"><strong>Room details</strong></td>
-                <td data-label="What it is">The 5-character room code, which phone is the host, the room’s status and when it was created.</td>
+                <td data-label="What it is">The 5-character room code, which phone is the host, the room’s status, when it was created and when it expires.</td>
                 <td data-label="Why">To let friends find and join the right room.</td>
               </tr>
               <tr>
@@ -140,8 +140,9 @@ const deleteMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Iss
             <strong>The host’s phone</strong> runs the game, so it has access to every player’s role and choices in order to apply the rules.
           </li>
           <li>
-            <strong>Other app users:</strong> room information (nicknames, the event log and revealed roles) is stored so that people using the
-            app with the room code can reach it. Treat your nickname as public and don’t use anything sensitive.
+            <strong>Other app users</strong> can’t browse, list or search rooms. A room can only be opened by someone who has its 5-character
+            code, and new players can only join before the game starts. Anyone with the code can see the room’s nicknames, event log and, once
+            the game ends, the revealed roles, so treat your nickname as visible to your room and don’t use anything sensitive.
           </li>
           <li><strong>{SITE.company}</strong> can access stored game data to operate, secure and support the game.</li>
         </ul>
@@ -166,18 +167,27 @@ const deleteMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Iss
 
         <h2 id="retention">How long we keep it, and how to delete it</h2>
         <p>
-          <strong>Plainly: online room data is not deleted automatically today.</strong> Once a room is created, the room record (nicknames,
-          anonymous IDs, the game log and roles) stays in our Firebase database until we delete it. The anonymous sign-in ID also stays in
-          Firebase Authentication. The exception is individual night choices and votes, which are deleted as soon as they’re processed.
+          <strong>Online room data is short-lived.</strong> The room record and everything in it (the room code, nicknames, anonymous IDs, each
+          player’s role, the game log, vote totals and any pending night choices or votes) is deleted:
         </p>
+        <ul>
+          <li>
+            <strong>when the host ends the game</strong>: leaving the room from the game-over screen, or cancelling the room before it starts,
+            deletes it right away; and
+          </li>
+          <li>
+            <strong>automatically, at the latest:</strong> every room expires 24 hours after it’s created, and expired room data is deleted
+            automatically shortly after, typically within a day. Expired rooms can’t be joined.
+          </li>
+        </ul>
         <p>
-          We’re building automatic cleanup of old rooms, and we’ll update this policy with the actual retention period when it ships.
+          Individual night choices and votes are deleted even sooner, as soon as the host’s phone has processed them. The anonymous sign-in ID
+          itself stays in Firebase Authentication; on its own it isn’t linked to your nickname or any game once the room has been deleted.
         </p>
         <p>
           <strong>To delete your data at any time,</strong> email <a href={deleteMail}>{SITE.email}</a> with the room code(s) and nickname(s) you
           used, if you have them. You don’t need an account and we won’t ask for ID beyond what we need to find the right records. We’ll delete
-          the matching data and confirm by email, normally within 30 days. Uninstalling the app does not delete data that’s already stored for past
-          online games.
+          the matching data and confirm by email, normally within 30 days. In most cases the room will already have been deleted automatically.
         </p>
 
         <h2 id="rights">Your choices and rights</h2>

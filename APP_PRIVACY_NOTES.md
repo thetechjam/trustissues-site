@@ -4,6 +4,16 @@ A fill-in guide for **App Store Connect → Trust Issues → App Privacy**. It i
 
 > **If the app changes, re-check this.** That includes adding Analytics or Crashlytics, App Check, push, a TTL or cleanup job, accounts, or chat. Also run Xcode → Archive → *Generate Privacy Report* before submitting, and make sure nothing in Firebase's bundled manifests contradicts these answers.
 
+
+> **Update 2026-11-19 — resolved in trust-issues PR #2** (https://github.com/thetechjam/trust-issues/pull/2):
+> - **Fix 1:** 24h `expiresAt` plus TTL on `rooms`/`private`/`actions`.
+> - **Fix 2:** the host deletes the room on leave or cancel.
+> - **Fix 3:** listing rooms is blocked by the rules.
+>
+> Once that build ships and the rules and TTL policy are live, online data is no longer kept indefinitely. It is deleted when the host ends the game, or expires 24h after the room is created and is deleted typically within a day after that. "Nothing deletes those records today" below describes the pre-PR state.
+>
+> Collection is still not transient (rooms live for up to ~24h+), so the Step 1 answer stays **Yes**. `SUBMISSION.md` in the app repo has the reconciled answer set.
+
 ---
 
 ## URLs

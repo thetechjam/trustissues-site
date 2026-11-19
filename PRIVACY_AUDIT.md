@@ -7,6 +7,13 @@
 
 All paths below are relative to `~/Projects/trust-issues/`. When a claim and the docs disagree, the code wins.
 
+
+> **Update 2026-11-19 — resolved in trust-issues PR #2** (https://github.com/thetechjam/trust-issues/pull/2, branch `fix/privacy-retention`):
+> - **Retention (§5):** every doc under `rooms/` now carries an `expiresAt` Timestamp. For rooms it is creation + 24h (`RoomRetention.ttl`) and immutable; for `private/` and `actions/` it is write time + 24h. A Firestore TTL policy on `expiresAt` for collection groups `rooms`, `private` and `actions` deletes them. Jesse still has to create that policy in the console. The host also deletes actions, then private docs, then the room when it leaves the finished game or cancels the lobby (`RoomRepository.endRoom(code:memberUIDs:)` is now called). Joins to expired rooms are rejected by both the client and the rules.
+> - **Rules (§6):** `rooms` is now `get`-only (`list` is denied) and all writes are validated: key whitelist, types, nickname length 1–24, immutable `hostUID`/`expiresAt`. Guests can only add their own lobby entry, and only to an unexpired lobby. Only the host can change game state or write and delete private docs and actions. 70 emulator tests are in `firestore-tests/`.
+> - **Still open:** anonymous Auth users persist (§5), room codes can still be guessed while a room exists (§6.2), and guests can't remove themselves from a lobby (§6.5). Everything takes effect only once the new app build ships, the rules are deployed and the TTL policy is created.
+> The original findings below are kept as a record of the state at `6622906`.
+
 ---
 
 ## 1. Summary

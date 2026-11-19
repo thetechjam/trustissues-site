@@ -49,12 +49,12 @@ export const FAQ: Faq[] = [
   {
     id: 'data',
     q: 'What data does Trust Issues collect?',
-    a: 'Very little. There are no accounts, ads, analytics or tracking. For online games the app stores the nickname you type, an anonymous ID and the game itself (roles, the narrator’s log, vote counts) in Google Firebase so phones can stay in sync. Pass-and-play games stay on your device. The Privacy Policy has the details.',
+    a: 'Very little. There are no accounts, ads, analytics or tracking. For online games the app stores the nickname you type, an anonymous ID and the game itself (roles, the narrator’s log, vote counts) in Google Firebase so phones can stay in sync. Pass-and-play games stay on your device. Room data is only reachable with the room code, is deleted when the host ends the game, and expires 24 hours after the room is created at the latest (it’s then deleted automatically, typically within a day). The Privacy Policy has the details.',
   },
   {
     id: 'delete',
     q: 'How do I delete my data?',
-    a: 'Email jam@thetechjam.com from any address with the room code (if you remember it) and the nickname you used, and we’ll delete the matching game data. There is no account to close. Uninstalling the app does not remove data already stored for past online games, so email us.',
+    a: 'Online room data deletes itself: it’s removed when the host ends the game, and every room expires 24 hours after it’s created (it’s then deleted automatically, typically within a day). If you want something deleted sooner, email jam@thetechjam.com with the room code (if you remember it) and the nickname you used. There is no account to close.',
   },
   {
     id: 'nickname',
