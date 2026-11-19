@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../config';
+
+const effective = 'November 19, 2026';
+const mail = `mailto:${SITE.email}`;
+---
+
+<BaseLayout title="Terms of Use" description="The terms for using the Trust Issues iPhone app and this website.">
+  <PageHeader eyebrow="Legal" title="Terms of Use" narrator="Point fingers. Officially, this time.">
+    <p class="meta">Effective {effective}</p>
+  </PageHeader>
+
+  <section class="section legal-section">
+    <div class="container"><div class="prose">
+      <p>
+        These terms apply to the Trust Issues iOS app (including TestFlight beta builds) and this website, both provided by {SITE.company}{' '}
+        ({SITE.author}). By using them, you agree to these terms. If you don’t agree, please don’t use the app.
+      </p>
+
+      <h2 id="apple">Apple’s standard terms</h2>
+      <p>
+        If you get Trust Issues from the App Store, Apple’s{' '}
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener">Licensed Application End User License Agreement</a>{' '}
+        (the “Standard EULA”) applies, and these terms add to it. Beta builds distributed through TestFlight are also subject to Apple’s TestFlight
+        terms. If these terms conflict with the Standard EULA, the Standard EULA wins. Apple isn’t responsible for the app or for supporting it;
+        we are.
+      </p>
+
+      <h2 id="license">Your license to use the app</h2>
+      <p>
+        We give you a personal, non-exclusive, non-transferable, revocable license to use Trust Issues on Apple devices you own or control, for
+        your own non-commercial entertainment. You may not copy, modify, reverse-engineer, resell or redistribute the app, or use it to build a
+        competing service, except where the law allows it regardless of these terms. We (and our licensors) keep all rights in the app, its name,
+        artwork, characters and narrator copy.
+      </p>
+
+      <h2 id="conduct">Play nice (the lying is the game, not the point)</h2>
+      <p>Lying to your friends inside the game is encouraged. Outside the game, please don’t:</p>
+      <ul>
+        <li>harass, threaten or bully other players, or use the game to target someone;</li>
+        <li>interfere with rooms you weren’t invited to, guess or scrape room codes, or try to read data you aren’t meant to see;</li>
+        <li>cheat by tampering with the app, its network traffic or our servers, or try to overload or break the service;</li>
+        <li>use the app in any way that breaks the law.</li>
+      </ul>
+      <p>We may block access or remove data that breaks these rules.</p>
+
+      <h2 id="nicknames">Nicknames</h2>
+      <p>
+        You choose your own nickname, and you’re responsible for it. Nicknames are visible to everyone in your room and appear in the game log, so
+        don’t use your full name, anyone else’s personal information, or anything offensive, hateful or infringing. We may remove nicknames that
+        break these rules. See the <a href="/privacy/">Privacy Policy</a> for how nicknames are stored.
+      </p>
+
+      <h2 id="beta">Beta builds and changes</h2>
+      <p>
+        Trust Issues is under active development. Beta builds may have bugs, lose a game in progress, or change without notice. We may update,
+        change or discontinue features, or the app itself, at any time. Online play depends on an internet connection and on third-party services{' '}
+        (Google Firebase) that we don’t control.
+      </p>
+
+      <h2 id="warranty">No warranty</h2>
+      <p>
+        The app and website are provided <strong>“as is” and “as available”</strong>, without warranties of any kind, express or implied,
+        including merchantability, fitness for a particular purpose and non-infringement, to the fullest extent the law allows. We don’t promise the
+        app will be uninterrupted, error-free, or that your friends will ever trust you again.
+      </p>
+
+      <h2 id="liability">Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, {SITE.company} and {SITE.author} won’t be liable for any indirect, incidental, special,
+        consequential or punitive damages, or any loss of data, goodwill or friendships, arising from your use of the app or website. Our total
+        liability for any claim relating to them is limited to the greater of the amount you paid for the app in the 12 months before the claim,
+        or US $10. Some places don’t allow these limits, so they may not apply to you.
+      </p>
+
+      <h2 id="law">Governing law</h2>
+      <p>
+        These terms are governed by the laws of the State of <strong class="placeholder">[STATE]</strong>, United States, without regard to its
+        conflict-of-law rules, except where the law of your country of residence requires otherwise. Disputes will be handled in the state or
+        federal courts located in <strong class="placeholder">[STATE]</strong>, unless your local consumer law gives you the right to bring them
+        elsewhere.
+      </p>
+
+      <h2 id="changes">Changes to these terms</h2>
+      <p>
+        We may update these terms from time to time. We’ll post the new version here and change the effective date. If you keep using the app
+        after a change, you accept the updated terms.
+      </p>
+
+      <h2 id="contact">Contact</h2>
+      <p>
+        Questions about these terms? Email <a href={mail}>{SITE.email}</a>.
+      </p>
+    </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-section {
+    padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+  .meta {
+    margin-top: 1rem;
+    font-family: var(--font-rounded);
+    font-weight: 750;
+    color: var(--text-secondary);
+  }
+  /* PLACEHOLDER marker — Jesse to replace [STATE] with the governing state. */
+  .placeholder {
+    color: var(--accent-sun);
+  }
+</style>

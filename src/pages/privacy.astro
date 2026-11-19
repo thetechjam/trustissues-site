@@ -1,0 +1,371 @@
+---
+/**
+ * Privacy Policy. Every statement here must match PRIVACY_AUDIT.md (repo root),
+ * which is derived from the app's code. When the app adds an SDK, a data
+ * field or a retention mechanism, re-run the audit and update this page.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../config';
+
+const effective = 'November 19, 2026';
+const mail = `mailto:${SITE.email}`;
+const toc: [string, string][] = [
+  ['who', 'Who we are'],
+  ['collect', 'What the app collects'],
+  ['visibility', 'Who can see it'],
+  ['legal-basis', 'How we use it'],
+  ['firebase', 'Google Firebase'],
+  ['retention', 'Retention & deletion'],
+  ['rights', 'Your rights'],
+  ['children', 'Children'],
+  ['transfers', 'International transfers'],
+  ['security', 'Security'],
+  ['website', 'This website'],
+  ['changes', 'Changes'],
+  ['contact', 'Contact'],
+];
+const deleteMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Issues data deletion request')}`;
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="How Trust Issues handles your data: no accounts, ads, analytics or tracking. Online games store a nickname, an anonymous ID and game state in Google Firebase."
+>
+  <PageHeader eyebrow="Legal" title="Privacy Policy" narrator="Somebody here is lying. It isn’t this page.">
+    <p class="meta">Effective {effective}</p>
+  </PageHeader>
+
+  <section class="section legal-section">
+    <div class="container legal-grid">
+      <nav class="toc" aria-label="On this page">
+        <p>On this page</p>
+        <ol>
+          {toc.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}
+        </ol>
+      </nav>
+      <div class="legal-main">
+      <aside class="glance" aria-labelledby="glance-title">
+        <h2 id="glance-title">At a glance</h2>
+        <ul>
+          <li><strong>No accounts.</strong> No email, phone number, password or sign-up.</li>
+          <li><strong>No ads, no analytics, no tracking.</strong> We don’t sell or share your data, and we don’t track you across apps or websites.</li>
+          <li>
+            <strong>Online games</strong> store the nickname you type, an anonymous ID and the game itself in Google Firebase, so every phone in
+            the room stays in sync.
+          </li>
+          <li><strong>Pass-and-play games</strong> stay on your device and aren’t sent to us.</li>
+          <li><strong>No device permissions.</strong> No camera, microphone, contacts, photos or location.</li>
+          <li>
+            <strong>Deletion:</strong> online game data is not deleted automatically yet. Email <a href={deleteMail}>{SITE.email}</a> and we’ll
+            delete it.
+          </li>
+        </ul>
+      </aside>
+
+      <div class="prose">
+        <h2 id="who">Who we are</h2>
+        <p>
+          Trust Issues is an iPhone game made by {SITE.company}, the independent studio of {SITE.author}. In this policy, “we” and “us” mean{' '}
+          {SITE.company}. We’re responsible for the personal information described here. Contact us any time at <a href={mail}>{SITE.email}</a>.
+        </p>
+        <p>
+          This policy covers the Trust Issues iOS app (including TestFlight beta builds) and this website,{' '}
+          <a href="/">trustissues.thetechjam.com</a>.
+        </p>
+
+        <h2 id="collect">What the app collects, and why</h2>
+        <p>Trust Issues has two ways to play, and they handle data differently.</p>
+
+        <h3>Pass-and-play (one phone)</h3>
+        <p>
+          When you play on a single device, the player names and the game exist only in the app’s memory on that phone. The app doesn’t sign
+          you in or send the game to our servers, and everything is gone when you close the app.
+        </p>
+
+        <h3>Online rooms (everyone on their own phone)</h3>
+        <p>When you host or join a room, the app uses Google Firebase to keep every phone in sync. It stores:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th scope="col">Data</th><th scope="col">What it is</th><th scope="col">Why</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Data"><strong>Nickname</strong></td>
+                <td data-label="What it is">The display name you type when you host or join. It can be anything; it doesn’t need to be your real name.</td>
+                <td data-label="Why">So other players can see who’s who, vote, and follow the narrator.</td>
+              </tr>
+              <tr>
+                <td data-label="Data"><strong>Anonymous ID</strong></td>
+                <td data-label="What it is">
+                  A random user ID created by Firebase Authentication’s anonymous sign-in when you first host or join. It isn’t connected to your
+                  name, email, Apple Account or advertising ID.
+                </td>
+                <td data-label="Why">So the room knows which phone is which, and so security rules can stop players from acting for each other.</td>
+              </tr>
+              <tr>
+                <td data-label="Data"><strong>Room details</strong></td>
+                <td data-label="What it is">The 5-character room code, which phone is the host, the room’s status and when it was created.</td>
+                <td data-label="Why">To let friends find and join the right room.</td>
+              </tr>
+              <tr>
+                <td data-label="Data"><strong>Game data</strong></td>
+                <td data-label="What it is">
+                  Each player’s secret role, night choices and votes, the narrator’s event log (which includes nicknames, e.g. “The sun rises. Sam
+                  didn’t.”), vote totals, who has been eliminated, and every role once the game ends.
+                </td>
+                <td data-label="Why">To run the game. Night choices and votes are deleted once the host’s phone has processed them; only vote totals are kept, not who voted for whom.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          That’s the full list. The app does not ask for or collect your email, phone number, contacts, photos, location, microphone or camera.
+          It has no chat feature. It contains no advertising, no analytics, no crash-reporting service and no in-app purchases, and it does not
+          access your device’s advertising identifier.
+        </p>
+        <p>
+          On your phone, the Firebase software keeps your anonymous sign-in and a local cache of room data so the game stays responsive. The app
+          itself doesn’t store anything else on your device.
+        </p>
+
+        <h2 id="visibility">Who can see your game data</h2>
+        <ul>
+          <li>
+            <strong>Players in your room</strong> see your nickname, the narrator’s log and vote totals. Your role is shown only on your own
+            phone until it’s publicly revealed by the game (for example, when you’re voted out or the game ends).
+          </li>
+          <li>
+            <strong>The host’s phone</strong> runs the game, so it has access to every player’s role and choices in order to apply the rules.
+          </li>
+          <li>
+            <strong>Other app users:</strong> room information (nicknames, the event log and revealed roles) is stored so that people using the
+            app with the room code can reach it. Treat your nickname as public and don’t use anything sensitive.
+          </li>
+          <li><strong>{SITE.company}</strong> can access stored game data to operate, secure and support the game.</li>
+        </ul>
+
+        <h2 id="legal-basis">How we use it</h2>
+        <p>
+          We use this information only to provide the game: creating rooms, letting players join, dealing roles, running each phase and showing
+          results. We do not use it for advertising or profiling, we do not sell or rent it, and we do not share it with anyone except the
+          service provider below. Where laws such as the GDPR apply, our legal basis is that processing is necessary to provide the game you
+          asked to play (performance of a contract) and our legitimate interest in keeping it working and secure.
+        </p>
+
+        <h2 id="firebase">Google Firebase (our service provider)</h2>
+        <p>
+          Online rooms use two Google Firebase services: <strong>Firebase Authentication</strong> (anonymous sign-in only) and{' '}
+          <strong>Cloud Firestore</strong> (the room database). Google processes this data on our behalf as a service provider. Like any
+          internet service, Google receives your device’s IP address when the app connects; we don’t store it. Learn more in{' '}
+          <a href="https://policies.google.com/privacy" rel="noopener">Google’s Privacy Policy</a> and{' '}
+          <a href="https://firebase.google.com/support/privacy" rel="noopener">Privacy and Security in Firebase</a>.
+        </p>
+        <p>We don’t use any other third-party services in the app.</p>
+
+        <h2 id="retention">How long we keep it, and how to delete it</h2>
+        <p>
+          <strong>Plainly: online room data is not deleted automatically today.</strong> Once a room is created, the room record (nicknames,
+          anonymous IDs, the game log and roles) stays in our Firebase database until we delete it. The anonymous sign-in ID also stays in
+          Firebase Authentication. The exception is individual night choices and votes, which are deleted as soon as they’re processed.
+        </p>
+        <p>
+          We’re building automatic cleanup of old rooms, and we’ll update this policy with the actual retention period when it ships.
+        </p>
+        <p>
+          <strong>To delete your data at any time,</strong> email <a href={deleteMail}>{SITE.email}</a> with the room code(s) and nickname(s) you
+          used, if you have them. You don’t need an account and we won’t ask for ID beyond what we need to find the right records. We’ll delete
+          the matching data and confirm by email, normally within 30 days. Uninstalling the app does not delete data that’s already stored for past
+          online games.
+        </p>
+
+        <h2 id="rights">Your choices and rights</h2>
+        <p>
+          You can play pass-and-play without sending anything to us, and you can use any nickname you like. Depending on where you live, you may
+          have the right to access, correct, delete or object to the processing of your personal information, and to complain to your local data
+          protection authority. To exercise any of these rights, email <a href={mail}>{SITE.email}</a>. We don’t sell personal information or
+          share it for cross-context behavioral advertising, as those terms are defined in California law.
+        </p>
+
+        <h2 id="children">Children</h2>
+        <p>
+          Trust Issues is a social party game meant for teens and adults. It is not directed to children under 13, and we do not knowingly
+          collect personal information from children under 13. If you believe a child under 13 has entered personal information (such as a real
+          name as their nickname) in an online room, email <a href={mail}>{SITE.email}</a> and we’ll delete it.
+        </p>
+
+        <h2 id="transfers">International transfers</h2>
+        <p>
+          {SITE.company} is based in the United States, and Google may process Firebase data in the United States or other countries where it
+          operates. By playing online, your game data may be transferred to and processed in countries other than your own, which may have
+          different data protection laws. Google provides safeguards for these transfers as described in its Firebase terms.
+        </p>
+
+        <h2 id="security">Security</h2>
+        <p>
+          Data travels between the app and Firebase over encrypted connections (TLS), and database access is limited by security rules (for
+          example, only you and the host’s phone can read your secret role). No system is perfectly secure, which is one more reason to keep
+          nicknames casual.
+        </p>
+
+        <h2 id="website">This website</h2>
+        <p>
+          trustissues.thetechjam.com is a static website hosted by Netlify. It has no accounts, no forms, no cookies, no analytics and no
+          advertising or tracking scripts, and its fonts are served from the site itself rather than third-party font services. Like any web
+          host, Netlify processes technical data such as your IP address, browser type and the pages requested in server logs to deliver the site
+          and protect it from abuse. See <a href="https://www.netlify.com/privacy/" rel="noopener">Netlify’s Privacy Policy</a>. If you email us,
+          we use your message and address only to reply.
+        </p>
+
+        <h2 id="changes">Changes to this policy</h2>
+        <p>
+          We’ll update this page when the app or website changes how it handles data, and change the effective date at the top. If a change is
+          significant, such as adding a new kind of data, we’ll also say so in the app’s release notes or on this site before it takes effect.
+        </p>
+
+        <h2 id="contact">Contact</h2>
+        <p>
+          {SITE.company} · {SITE.author}<br />
+          Email: <a href={mail}>{SITE.email}</a>
+        </p>
+      </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .meta {
+    margin-top: 1rem;
+    font-family: var(--font-rounded);
+    font-weight: 750;
+    color: var(--text-secondary);
+  }
+  .legal-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .toc {
+    display: none;
+  }
+  @media (min-width: 1040px) {
+    .legal-grid {
+      grid-template-columns: minmax(0, var(--text-w)) 15rem;
+      column-gap: clamp(3rem, 8vw, 8rem);
+    }
+    .legal-main {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .toc {
+      display: block;
+      grid-column: 2;
+      grid-row: 1;
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+      align-self: start;
+      font-size: var(--step--1);
+    }
+    .toc p {
+      font-family: var(--font-rounded);
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: var(--accent-moon);
+      margin-bottom: 0.75rem;
+    }
+    .toc ol {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 1rem;
+      border-left: 1px solid var(--rule);
+      display: grid;
+      gap: 0.15rem;
+    }
+    .toc a {
+      display: block;
+      padding: 0.25rem 0;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .toc a:hover {
+      color: var(--text-primary);
+    }
+  }
+  .legal-section {
+    padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+  @media (max-width: 640px) {
+    .table-wrap thead {
+      display: none;
+    }
+    .table-wrap tr,
+    .table-wrap td {
+      display: block;
+    }
+    .table-wrap tr {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .table-wrap tr:last-child {
+      border-bottom: 0;
+    }
+    .table-wrap td {
+      border: 0;
+      padding: 0.25rem 1rem;
+    }
+    .table-wrap td[data-label]:not([data-label='Data'])::before {
+      content: attr(data-label);
+      display: block;
+      font-family: var(--font-rounded);
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-moon);
+    }
+  }
+  .glance {
+    max-width: var(--text-w);
+    padding: 1.6rem 1.75rem;
+    border-radius: var(--radius-sheet);
+    background:
+      radial-gradient(20rem 12rem at 100% 0%, rgb(167 139 250 / 0.18), transparent 70%),
+      var(--bg-night-elevated);
+    box-shadow: inset 0 0 0 1px rgb(167 139 250 / 0.3);
+    margin-bottom: 1rem;
+  }
+  .glance h2 {
+    font-size: var(--step-2);
+    margin-bottom: 1rem;
+  }
+  .glance ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.7rem;
+    color: var(--text-secondary);
+  }
+  .glance li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .glance li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent-primary);
+  }
+  .glance strong {
+    color: var(--text-primary);
+    font-weight: 650;
+  }
+</style>

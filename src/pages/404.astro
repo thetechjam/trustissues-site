@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Glyph from '../components/Glyph.astro';
+---
+
+<BaseLayout title="Page not found" description="This page doesn’t exist. Someone here is lying." noindex>
+  <section class="nf">
+    <div class="container inner">
+      <Glyph name="moon" class="moon" />
+      <p class="eyebrow">404 · Eliminated</p>
+      <h1>Someone here is lying.</h1>
+      <p class="narrator line">It might be this URL.</p>
+      <p class="sub">The page you were looking for was voted out, or never existed. The village has spoken.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/">Back to the village <Glyph name="arrow" /></a>
+        <a class="btn btn-secondary" href="/support/">Get support</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    min-height: calc(100svh - var(--header-h) - 10rem);
+    display: grid;
+    align-items: center;
+    padding-block: 5rem;
+    background:
+      radial-gradient(34rem 22rem at 50% 20%, rgb(167 139 250 / 0.18), transparent 70%),
+      var(--bg-night-base);
+    text-align: center;
+  }
+  .inner {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+  .nf :global(.moon) {
+    width: 4.5rem;
+    height: 4.5rem;
+    color: var(--accent-moon);
+    filter: drop-shadow(0 0 24px rgb(199 210 254 / 0.5));
+  }
+  .eyebrow {
+    color: var(--danger);
+  }
+  h1 {
+    font-size: var(--step-5);
+    font-weight: 950;
+  }
+  .line {
+    font-size: var(--step-3);
+    color: var(--accent-moon);
+  }
+  .sub {
+    color: var(--text-secondary);
+    font-size: var(--step-1);
+    max-width: 32rem;
+  }
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  .actions :global(svg) {
+    width: 1.1rem;
+  }
+</style>
