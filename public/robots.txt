@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trustissues.thetechjam.com/sitemap-index.xml
