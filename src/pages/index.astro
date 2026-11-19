@@ -1,0 +1,967 @@
+---
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaGroup from '../components/CtaGroup.astro';
+import Glyph from '../components/Glyph.astro';
+import PhoneFrame from '../components/PhoneFrame.astro';
+import hero from '../assets/images/hero.png';
+import heroMobile from '../assets/images/hero-mobile.png';
+import friends from '../assets/images/friends.png';
+import appIcon from '../assets/images/app-icon.png';
+import { ROLES } from '../data/roles';
+import { SCREENSHOTS } from '../data/screenshots';
+import { HOME_FAQ } from '../data/faq';
+import { SITE } from '../config';
+import { mobileApp, organization, website } from '../lib/jsonld';
+
+async function srcset(src: ImageMetadata, widths: number[], format: 'avif' | 'webp') {
+  const list = widths.filter((w) => w <= src.width);
+  const imgs = await Promise.all(list.map((width) => getImage({ src, width, format, quality: format === 'avif' ? 55 : 76 })));
+  return imgs.map((img, i) => `${img.src} ${list[i]}w`).join(', ');
+}
+const desktopWidths = [1280, 1920, 2560, 3200];
+const mobileWidths = [448, 672, 896];
+const [dAvif, dWebp, mAvif, mWebp] = await Promise.all([
+  srcset(hero, desktopWidths, 'avif'),
+  srcset(hero, desktopWidths, 'webp'),
+  srcset(heroMobile, mobileWidths, 'avif'),
+  srcset(heroMobile, mobileWidths, 'webp'),
+]);
+const heroFallback = await getImage({ src: heroMobile, width: 896, format: 'webp', quality: 76 });
+
+const steps = [
+  {
+    glyph: 'phone',
+    title: 'Someone hosts',
+    body: 'One phone creates the room and picks the cast. Wolves, Seer, Doctor, and the chaos roles if you’re feeling brave.',
+  },
+  {
+    glyph: 'code',
+    title: 'Everyone joins',
+    body: 'Friends punch in the five-character room code on their own phones. Across the couch or across the country.',
+  },
+  {
+    glyph: 'cards',
+    title: 'Secret roles',
+    body: 'Each phone deals one card, privately. Hold to reveal. No screen-peeking. You know what you are. Probably.',
+  },
+  {
+    glyph: 'vote',
+    title: 'Night, day, vote',
+    body: 'Phones run the night in silence. By day you argue out loud, then vote someone out. Repeat until one side is standing.',
+  },
+] as const;
+---
+
+<BaseLayout jsonLd={[organization(), website(), mobileApp()]}>
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <picture class="hero-art">
+      <source media="(min-width: 820px)" type="image/avif" srcset={dAvif} sizes="100vw" width={hero.width} height={hero.height} />
+      <source media="(min-width: 820px)" type="image/webp" srcset={dWebp} sizes="100vw" width={hero.width} height={hero.height} />
+      <source type="image/avif" srcset={mAvif} sizes="100vw" width={heroMobile.width} height={heroMobile.height} />
+      <source type="image/webp" srcset={mWebp} sizes="100vw" width={heroMobile.width} height={heroMobile.height} />
+      <img
+        src={heroFallback.src}
+        alt="A smug crescent moon grins over a sleeping village. In one window, the silhouette of a werewolf."
+        width={heroMobile.width}
+        height={heroMobile.height}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <div class="hero-top">
+        <div class="hero-badge">
+          <Image src={appIcon} alt="Trust Issues app icon" width={72} height={72} densities={[1, 2]} loading="eager" class="hero-icon" />
+          <p>
+            <strong>Trust Issues</strong>
+            <span>A party game for iPhone</span>
+          </p>
+        </div>
+        <h1 id="hero-title">Lie to your friends. <span>Nicely.</span></h1>
+        <p class="narrator hero-line">Roles are dealt. Someone here is already lying.</p>
+        </div>
+        <div class="hero-bottom">
+        <p class="hero-sub">
+          A werewolf-style social deduction game where every player uses their own phone and the app is the narrator. Nobody sits out to run
+          the game. Everybody gets to be a suspect.
+        </p>
+        <CtaGroup />
+        <ul class="hero-facts" aria-label="At a glance">
+          <li><Glyph name="people" /> {SITE.minPlayers}+ players</li>
+          <li><Glyph name="wifi" /> Same room or remote</li>
+          <li><Glyph name="phone" /> iOS {SITE.minIOS.replace('.0', '')}+</li>
+        </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT PLAYS (night) ============ -->
+  <section id="how-it-plays" class="section how" data-phase="night" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow"><Glyph name="moon" class="eyebrow-glyph" /> How it plays</p>
+        <h2 id="how-title">A night, a day, a funeral.</h2>
+        <p>
+          The classic party game, minus the poor soul with the script. Your phones deal the roles, run the night in silence and count the
+          votes. You bring the accusations.
+        </p>
+      </div>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step" data-reveal style={`transition-delay:${i * 70}ms`}>
+              <span class="step-num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <Glyph name={s.glyph} class="step-glyph" />
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ ROLES (night) ============ -->
+  <section id="roles" class="section roles" data-phase="night" aria-labelledby="roles-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow"><Glyph name="moon" class="eyebrow-glyph" /> The cast</p>
+        <h2 id="roles-title">Everyone here is lying. Some of them have a reason.</h2>
+        <p>Seven roles, three ways to win. The chaos roles unlock once the table is big enough to deserve them.</p>
+      </div>
+      <ul class="role-grid">
+        {
+          ROLES.map((r) => (
+            <li class="role-card" style={`--role: var(--role-${r.key})`} data-reveal>
+              <div class="role-top">
+                <span class="role-icon">
+                  <Glyph name={r.key} />
+                </span>
+                <span class="role-team">{r.team}</span>
+              </div>
+              <h3 class="role-name">{r.name}</h3>
+              <p class="narrator role-blurb">{r.blurb}</p>
+              <p class="role-detail">{r.detail}</p>
+              {r.unlock && <p class="role-unlock">Unlocks at {r.unlock}</p>}
+            </li>
+          ))
+        }
+        <li class="win-card" data-reveal>
+          <h3>Three ways to win</h3>
+          <ul>
+            <li style="--role: var(--role-villager)"><Glyph name="villager" /><span><strong>Village</strong> wins when the last werewolf is gone.</span></li>
+            <li style="--role: var(--role-werewolf-tint)"><Glyph name="werewolf" /><span><strong>Wolves</strong> win when they match the rest of the table in number.</span></li>
+            <li style="--role: var(--role-jester)"><Glyph name="jester" /><span><strong>Jester</strong> wins alone, by getting voted out.</span></li>
+          </ul>
+          <p class="narrator">Trust: partially restored.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ DAWN + FRIENDS ============ -->
+  <section class="dawn" aria-labelledby="friends-title">
+    <div class="container friends">
+      <div class="friends-art" data-reveal>
+        <Image
+          src={friends}
+          alt="Five friends sit in a circle on a living-room floor at night, each lit by a phone glowing a different color, one pointing an accusing finger."
+          widths={[640, 960, 1344]}
+          sizes="(max-width: 900px) 100vw, 640px"
+          quality={78}
+        />
+      </div>
+      <div class="friends-copy" data-reveal>
+        <p class="eyebrow sun"><Glyph name="sun" class="eyebrow-glyph" /> Every phone is the narrator</p>
+        <h2 id="friends-title">Nobody has to sit out and read the script.</h2>
+        <p>
+          In the old version, one friend runs the game and never gets to play. Here the app is the emcee: it deals the cards, wakes the wolves,
+          whispers to the Seer and announces the morning news. Out loud, everyone’s a suspect. Including the host.
+        </p>
+        <ul class="ticks">
+          <li><strong>Private by design.</strong> Your role lives on your phone, not on a card someone can glimpse.</li>
+          <li><strong>Hands-free nights.</strong> No “everyone close your eyes” from a human who then knows everything.</li>
+          <li><strong>Dead, not gone.</strong> Eliminated players get last words and watch the rest unfold.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY (day) ============ -->
+  <section id="screens" class="section gallery" data-phase="day" aria-labelledby="gallery-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow"><Glyph name="sun" class="eyebrow-glyph" /> Inside the app</p>
+        <h2 id="gallery-title">The sun rises. The questions start.</h2>
+        <p>Night is cool indigo. Day is warm espresso. The whole table watches the palette turn when the news lands.</p>
+      </div>
+    </div>
+    <div class="shots-wrap">
+      <ul class="shots" aria-label="App screenshots" tabindex="0">
+        {
+          SCREENSHOTS.map((s) => (
+            <li class="shot" data-phase={s.phase}>
+              <figure>
+                <PhoneFrame image={s.image} alt={s.alt} />
+                <figcaption>
+                  <span class="shot-label">{s.label}</span>
+                  <span class="narrator">{s.caption}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <p class="container shots-note">Pre-release screens. Final details may change before launch.</p>
+  </section>
+
+  <!-- ============ PLAY ANYWHERE (day) ============ -->
+  <section class="section anywhere" data-phase="day" aria-labelledby="anywhere-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow"><Glyph name="sun" class="eyebrow-glyph" /> Wherever your friends are</p>
+        <h2 id="anywhere-title">Same couch. Different time zones. Same lies.</h2>
+      </div>
+      <div class="modes">
+        <article class="mode" data-reveal>
+          <Glyph name="people" class="mode-glyph" />
+          <h3>In the room</h3>
+          <p>
+            Everyone on their own phone, arguing face to face. Phones go down at night, eyes go up by day. Watching someone lie to your face is
+            half the fun.
+          </p>
+        </article>
+        <article class="mode" data-reveal>
+          <Glyph name="wifi" class="mode-glyph" />
+          <h3>Remote</h3>
+          <p>
+            Rooms run over the internet, so the table can be spread across cities. Hop on a video or voice call for the day phase and play
+            exactly the same game.
+          </p>
+        </article>
+        <article class="mode" data-reveal>
+          <Glyph name="phone" class="mode-glyph" />
+          <h3>One phone, passed around</h3>
+          <p>Not everyone has the app yet? Pass-and-play runs a whole game on a single device. No peeking over shoulders.</p>
+        </article>
+        <article class="mode count" data-reveal>
+          <p class="count-num">{SITE.minPlayers}+</p>
+          <h3>Players</h3>
+          <p>Four is the minimum. Five unlocks the Hunter, Minion and Jester. After that, the more, the messier.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ TEASER (dusk) ============ -->
+  <section class="section faq dusk" aria-labelledby="faq-title">
+    <div class="container faq-grid">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow"><Glyph name="moon" class="eyebrow-glyph" /> Questions</p>
+        <h2 id="faq-title">Asking questions is very on-theme.</h2>
+        <p>The short answers are here. The rest live on the <a href="/support/">support page</a>.</p>
+      </div>
+      <div class="faq-list">
+        {
+          HOME_FAQ.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+        <a class="more" href="/support/">
+          All questions and support <Glyph name="arrow" />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA (night) ============ -->
+  <section class="final" aria-labelledby="final-title">
+    <div class="container final-inner" data-reveal>
+      <Image src={appIcon} alt="" width={112} height={112} densities={[1, 2]} class="final-icon" />
+      <h2 id="final-title">Night is falling.</h2>
+      <p class="narrator final-line">Eyes closed, phones down. Mostly.</p>
+      <p class="final-sub">Trust Issues is in beta on TestFlight and coming soon to the App Store.</p>
+      <CtaGroup align="center" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    min-height: min(100svh - var(--header-h), 960px);
+    display: grid;
+    align-items: center;
+    background: var(--bg-night-base);
+    overflow: hidden;
+  }
+  .hero-art,
+  .hero-art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+  }
+  .hero-art img {
+    object-fit: cover;
+    object-position: 70% 50%;
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgb(11 14 26 / 0.85) 0%, rgb(11 14 26 / 0.55) 38%, rgb(11 14 26 / 0) 62%),
+      linear-gradient(0deg, var(--bg-night-base) 0%, rgb(11 14 26 / 0) 22%);
+  }
+  .hero-inner {
+    padding-block: clamp(3rem, 2rem + 5vw, 6rem);
+  }
+  .hero-copy,
+  .hero-top,
+  .hero-bottom {
+    max-width: 38rem;
+    display: grid;
+    gap: 1.4rem;
+  }
+  .hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .hero-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 1px rgb(167 139 250 / 0.35),
+      0 14px 40px -8px rgb(167 139 250 / 0.55);
+  }
+  .hero-badge p {
+    display: grid;
+    line-height: 1.2;
+  }
+  .hero-badge strong {
+    font-family: var(--font-rounded);
+    font-weight: 900;
+    font-size: 1.25rem;
+  }
+  .hero-badge span {
+    color: var(--text-secondary);
+    font-size: var(--step--1);
+    font-family: var(--font-rounded);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: var(--step-5);
+    font-weight: 950;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-shadow: 0 4px 30px rgb(11 14 26 / 0.6);
+  }
+  .hero h1 span {
+    color: var(--accent-primary);
+    display: inline-block;
+  }
+  .hero-line {
+    font-size: var(--step-2);
+    color: var(--accent-moon);
+  }
+  .hero-sub {
+    font-size: var(--step-1);
+    color: var(--text-primary);
+    opacity: 0.88;
+    max-width: 34rem;
+  }
+  .hero-facts {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .hero-facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    background: rgb(30 36 64 / 0.7);
+    box-shadow: inset 0 0 0 1px var(--rule);
+    font-family: var(--font-rounded);
+    font-weight: 750;
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+    backdrop-filter: blur(6px);
+  }
+  .hero-facts :global(svg) {
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--accent-moon);
+  }
+  /* Mobile: 4:5 art sits at the top. Headline lives in the empty sky,
+     the moon stays visible, and the rest of the copy starts below it. */
+  @media (max-width: 819px) {
+    .hero {
+      align-items: start;
+      min-height: auto;
+    }
+    .hero-art,
+    .hero-art img {
+      height: 125vw;
+      bottom: auto;
+    }
+    .hero-art img {
+      object-position: 50% 0%;
+    }
+    .hero-scrim {
+      height: 125vw;
+      bottom: auto;
+      background:
+        linear-gradient(180deg, rgb(11 14 26 / 0.35) 0%, rgb(11 14 26 / 0) 38%),
+        linear-gradient(0deg, var(--bg-night-base) 0%, rgb(11 14 26 / 0.7) 18%, rgb(11 14 26 / 0) 38%);
+    }
+    .hero-inner {
+      padding-top: clamp(1.25rem, 6vw, 2.5rem);
+    }
+    .hero-badge {
+      display: none;
+    }
+    .hero-top {
+      min-height: calc(100vw - 1rem);
+      align-content: start;
+      gap: 0.9rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 11.5vw, 4.5rem);
+    }
+    .hero-line {
+      font-size: clamp(1.2rem, 5vw, 1.6rem);
+      max-width: 22ch;
+    }
+  }
+
+  .section-head h2 {
+    font-size: clamp(2.2rem, 1.6rem + 2.6vw, 3.9rem);
+  }
+  .section-head {
+    max-width: 52rem;
+  }
+  .eyebrow :global(.eyebrow-glyph) {
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  /* ---------- Steps ---------- */
+  .how {
+    background:
+      radial-gradient(50rem 24rem at 100% 0%, rgb(167 139 250 / 0.08), transparent 70%),
+      var(--base);
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+  }
+  .step {
+    position: relative;
+    padding: 1.5rem;
+    border-radius: var(--radius-card);
+    background: var(--elevated);
+    box-shadow: inset 0 0 0 1px var(--rule);
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+  .step-num {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-family: var(--font-rounded);
+    font-weight: 950;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--raised);
+    -webkit-text-stroke: 1px rgb(199 210 254 / 0.18);
+  }
+  .step :global(.step-glyph) {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.6rem;
+    border-radius: 12px;
+    background: rgb(167 139 250 / 0.15);
+    color: var(--accent-primary);
+    margin-bottom: 0.4rem;
+  }
+  .step h3 {
+    font-size: var(--step-1);
+  }
+  .step p {
+    color: var(--text-secondary);
+  }
+
+  /* ---------- Roles ---------- */
+  .roles {
+    padding-top: 0;
+  }
+  .role-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
+    gap: 1rem;
+  }
+  .role-card {
+    position: relative;
+    overflow: hidden;
+    padding: 1.4rem 1.4rem 1.5rem;
+    border-radius: var(--radius-sheet);
+    background:
+      radial-gradient(16rem 10rem at 0% 0%, color-mix(in srgb, var(--role) 16%, transparent), transparent 75%),
+      var(--elevated);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--role) 28%, transparent),
+      0 20px 40px -28px color-mix(in srgb, var(--role) 60%, transparent);
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .role-card:hover {
+    transform: translateY(-3px);
+  }
+  .role-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+  .role-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--role) 14%, transparent);
+    color: var(--role);
+  }
+  .role-icon :global(svg) {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .role-team {
+    font-family: var(--font-rounded);
+    font-weight: 750;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--raised);
+  }
+  .role-name {
+    font-size: var(--step-2);
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--role);
+  }
+  .role-blurb {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+  }
+  .role-detail {
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+  }
+  .role-unlock {
+    justify-self: start;
+    margin-top: 0.2rem;
+    font-family: var(--font-rounded);
+    font-weight: 750;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-moon);
+  }
+
+  .win-card {
+    padding: 1.4rem 1.4rem 1.5rem;
+    border-radius: var(--radius-sheet);
+    background: var(--raised);
+    box-shadow: inset 0 0 0 1px var(--rule);
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+  }
+  .win-card h3 {
+    font-size: var(--step-1);
+  }
+  .win-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .win-card li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+  }
+  .win-card li :global(svg) {
+    flex: none;
+    width: 1.3rem;
+    height: 1.3rem;
+    color: var(--role);
+    margin-top: 0.1rem;
+  }
+  .win-card strong {
+    color: var(--role);
+    font-weight: 750;
+  }
+  .win-card .narrator {
+    color: var(--accent-moon);
+    font-size: 1.1rem;
+  }
+
+  /* ---------- Dawn / friends ---------- */
+  .dawn {
+    padding-block: calc(var(--space-section) * 0.6) var(--space-section);
+    background:
+      radial-gradient(40rem 20rem at 85% 100%, rgb(251 191 36 / 0.1), transparent 70%),
+      linear-gradient(180deg, var(--bg-night-base) 0%, #120f17 50%, var(--bg-day-base) 100%);
+  }
+  .friends {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(2rem, 1rem + 4vw, 4.5rem);
+    align-items: center;
+  }
+  .friends-art {
+    border-radius: var(--radius-sheet);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px var(--rule),
+      0 40px 80px -30px rgb(167 139 250 / 0.35),
+      var(--shadow);
+  }
+  .friends-art :global(img) {
+    width: 100%;
+  }
+  .friends-copy {
+    display: grid;
+    gap: 1.2rem;
+  }
+  .friends-copy h2 {
+    font-size: var(--step-3);
+  }
+  .friends-copy > p:not(.eyebrow) {
+    color: var(--text-secondary);
+    font-size: var(--step-1);
+  }
+  .eyebrow.sun {
+    color: var(--accent-sun);
+  }
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+  }
+  .ticks li {
+    position: relative;
+    padding-left: 1.6rem;
+  }
+  .ticks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    box-shadow: 0 0 12px rgb(167 139 250 / 0.8);
+  }
+  .ticks strong {
+    color: var(--text-primary);
+    font-weight: 650;
+  }
+  @media (max-width: 900px) {
+    .friends {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery {
+    background:
+      radial-gradient(50rem 22rem at 20% 0%, rgb(251 191 36 / 0.07), transparent 70%),
+      var(--base);
+  }
+  .shots-wrap {
+    position: relative;
+  }
+  .shots {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding: 1rem max(var(--gutter), calc((100vw - var(--max-w)) / 2)) 2rem;
+    scroll-padding-inline: max(var(--gutter), calc((100vw - var(--max-w)) / 2));
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-day-raised) transparent;
+  }
+  .shots:focus-visible {
+    outline-offset: -4px;
+  }
+  .shot {
+    flex: 0 0 clamp(13.5rem, 62vw, 17.5rem);
+    scroll-snap-align: start;
+  }
+  .shot figure {
+    margin: 0;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .shot figcaption {
+    display: grid;
+    gap: 0.3rem;
+    padding-inline: 0.25rem;
+  }
+  .shot-label {
+    font-family: var(--font-rounded);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--phase-accent);
+  }
+  .shot .narrator {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+  }
+  .gallery {
+    padding-bottom: calc(var(--space-section) * 0.6);
+  }
+  .shots-note {
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+  }
+
+  /* ---------- Play anywhere ---------- */
+  .anywhere {
+    padding-top: calc(var(--space-section) * 0.4);
+  }
+  .modes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+  }
+  .mode {
+    padding: 1.6rem;
+    border-radius: var(--radius-card);
+    background: var(--elevated);
+    box-shadow: inset 0 0 0 1px rgb(251 191 36 / 0.1);
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+  .mode :global(.mode-glyph) {
+    width: 2rem;
+    height: 2rem;
+    color: var(--accent-sun);
+    margin-bottom: 0.3rem;
+  }
+  .mode h3 {
+    font-size: var(--step-1);
+  }
+  .mode p {
+    color: var(--text-secondary);
+  }
+  .mode.count {
+    background:
+      radial-gradient(14rem 10rem at 100% 0%, rgb(251 191 36 / 0.16), transparent 70%),
+      var(--raised);
+  }
+  .count-num {
+    font-family: var(--font-rounded);
+    font-weight: 950;
+    font-size: var(--step-4);
+    line-height: 0.9;
+    color: var(--accent-sun) !important;
+  }
+
+  /* ---------- FAQ teaser ---------- */
+  .dusk {
+    background: linear-gradient(180deg, var(--bg-day-base) 0%, #110f15 45%, var(--bg-night-base) 100%);
+  }
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: start;
+  }
+  .faq-grid .section-head h2 {
+    font-size: var(--step-3);
+  }
+  .faq-list {
+    display: grid;
+    gap: 0.6rem;
+  }
+  details {
+    border-radius: var(--radius-card);
+    background: rgb(21 26 46 / 0.75);
+    box-shadow: inset 0 0 0 1px var(--rule);
+  }
+  summary {
+    cursor: pointer;
+    list-style: none;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-rounded);
+    font-weight: 800;
+    font-size: var(--step-0);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: '+';
+    flex: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--accent-primary);
+    transition: transform 0.25s var(--ease-out);
+  }
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+  details p {
+    padding: 0 1.2rem 1.2rem;
+    color: var(--text-secondary);
+  }
+  .more {
+    margin-top: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: var(--tap);
+    font-family: var(--font-rounded);
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .more :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  @media (max-width: 860px) {
+    .faq-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Final CTA ---------- */
+  .final {
+    padding-block: var(--space-section);
+    background:
+      radial-gradient(36rem 22rem at 50% 30%, rgb(167 139 250 / 0.2), transparent 70%),
+      radial-gradient(20rem 14rem at 50% 25%, rgb(199 210 254 / 0.1), transparent 70%),
+      var(--bg-night-base);
+    text-align: center;
+  }
+  .final-inner {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+  .final-icon {
+    width: 112px;
+    height: 112px;
+    border-radius: 25px;
+    box-shadow:
+      0 0 0 1px rgb(167 139 250 / 0.35),
+      0 20px 60px -10px rgb(167 139 250 / 0.6);
+    margin-bottom: 0.5rem;
+  }
+  .final h2 {
+    font-size: var(--step-5);
+    font-weight: 950;
+  }
+  .final-line {
+    font-size: var(--step-2);
+    color: var(--accent-moon);
+  }
+  .final-sub {
+    color: var(--text-secondary);
+    font-size: var(--step-1);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ---------- Night → day as you scroll (progressive enhancement) ----------
+     Base experience: static night/day section palettes above. Where
+     scroll-driven animations exist and motion is welcome, the hero moon art
+     drifts and fades as night gives way. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-art img {
+        animation: moonset linear both;
+        animation-timeline: view();
+        animation-range: exit 0% exit 100%;
+      }
+      .role-card,
+      .mode,
+      .step {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 60%;
+      }
+      @keyframes moonset {
+        to {
+          transform: translateY(12%) scale(1.04);
+          opacity: 0.35;
+        }
+      }
+      @keyframes rise {
+        from {
+          opacity: 0.3;
+          transform: translateY(18px);
+        }
+      }
+    }
+  }
+</style>
