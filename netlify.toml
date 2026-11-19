@@ -1,0 +1,30 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# The site lives on a subdomain (trustissues.thetechjam.com), so no domain
+# redirects are needed today. If Trust Issues ever gets its own domain,
+# canonicalize the alternates like this (and update `site` in astro.config.mjs):
+#
+# [[redirects]]
+#   from = "https://www.trustissuesgame.com/*"
+#   to = "https://trustissuesgame.com/:splat"
+#   status = 301
+#   force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
