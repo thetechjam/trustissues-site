@@ -10,7 +10,7 @@ Intended URL: **https://trustissues.thetechjam.com**
 | --- | --- | --- |
 | Home | `/` | Marketing URL |
 | Privacy Policy | `/privacy/` | Privacy Policy URL |
-| Support (+ FAQ, `#beta`) | `/support/` | Support URL |
+| Support (+ FAQ) | `/support/` | Support URL |
 | Terms of Use | `/terms/` | — |
 | 404 | `/404.html` | — |
 
@@ -42,14 +42,12 @@ CI: `.github/workflows/ci.yml` runs `npm ci`, `npm run check`, `npm run build` o
 
 ## Launch-day switches (`src/config.ts`)
 
-- `TESTFLIGHT_URL` — `null` today, so "Join the TestFlight beta" goes to `/support/#beta`
-  (email jam@thetechjam.com for an invite). Paste the public `https://testflight.apple.com/join/…`
-  link and every beta CTA links straight to it; the support page switches to install steps.
 - `APP_STORE_URL` — set (live since 2026-11-20). The primary CTA is Apple's official white
   "Download on the App Store" badge (vendored unmodified in `src/assets/badges/`, see the README
   there) linking to this URL, and the MobileApplication JSON-LD gets
   `installUrl`/`downloadUrl`/`offers`. If `null`, the CTA reverts to a non-link "Coming soon"
-  pill in the site's own tokens (no Apple artwork).
+  pill in the site's own tokens (no Apple artwork). The badge is the site's only download CTA:
+  there is no public beta link (TestFlight is internal-only now that the app is live).
 - `APP_STORE_ID` — set; drives the Smart App Banner (`apple-itunes-app` meta in
   `src/layouts/BaseLayout.astro`), omitted while `null`.
 - Pricing: v1 is a free download, no ads, no IAP ("Is it free?" in `src/data/faq.ts`). Update it
@@ -67,7 +65,6 @@ and `alt`/`caption` in `screenshots.ts`. Any slot with `image: null` renders the
 ## Placeholders / open items
 
 - `[STATE]` governing-law placeholder in `src/pages/terms.astro` (highlighted in gold on the page).
-- `TESTFLIGHT_URL` in `src/config.ts` (still `null`).
 - Privacy Policy retention section says plainly that online rooms are **not auto-deleted yet**.
   When the app ships TTL/cleanup, update `/privacy/` with the real window (see `docs/privacy-audit/PRIVACY_AUDIT.md` §5 in the private trust-issues repo).
 

@@ -14,7 +14,7 @@ Static Astro 7 site for the Trust Issues iOS app (app repo: `~/Projects/trust-is
 
 | Path | Purpose |
 | --- | --- |
-| `src/config.ts` | `SITE`, `NAV`, launch switches (`TESTFLIGHT_URL`, `APP_STORE_URL`, `APP_STORE_ID`) |
+| `src/config.ts` | `SITE`, `NAV`, launch switches (`APP_STORE_URL`, `APP_STORE_ID`) |
 | `src/styles/global.css` | Design tokens (ported from the app) + base styles |
 | `src/data/roles.ts` | Roles: names/blurbs/details lifted from the app's `Game/Role+Presentation.swift` |
 | `src/data/screenshots.ts` | Gallery images + narrator captions |
@@ -45,7 +45,8 @@ Static Astro 7 site for the Trust Issues iOS app (app repo: `~/Projects/trust-is
   badge, vendored byte-for-byte in `src/assets/badges/` (source URLs in the README there). Never
   edit or optimize those SVGs. CSS may only size, align and space the badge (≥ 40px tall, clear
   space ≥ 1/4 of its height): no shadows, filters, borders or backgrounds. Don't show the black
-  variant on this dark site.
+  variant on this dark site. The badge is the only download CTA: don't add a public TestFlight /
+  "join the beta" invite (TestFlight is internal-only now).
 
 ## Images
 

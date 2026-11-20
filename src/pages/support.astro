@@ -3,16 +3,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Glyph from '../components/Glyph.astro';
 import { FAQ } from '../data/faq';
-import { SITE, TESTFLIGHT_URL } from '../config';
+import { SITE } from '../config';
 import { faqPage } from '../lib/jsonld';
 
 const mail = `mailto:${SITE.email}`;
-const betaMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Issues TestFlight invite')}`;
 ---
 
 <BaseLayout
   title="Support"
-  description="Help with Trust Issues, the iPhone party game: contact, FAQ, player counts, remote play, data deletion and how to join the TestFlight beta."
+  description="Help with Trust Issues, the iPhone party game: contact, FAQ, player counts, remote play, data deletion and where to download it on the App Store."
   jsonLd={[faqPage(FAQ.map(({ q, a }) => ({ q, a })))]}
 >
   <PageHeader eyebrow="Support" title="Need a hand?" narrator="Deadlock. The village agrees to disagree. We can help with that.">
@@ -30,7 +29,7 @@ const betaMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Issue
   </PageHeader>
 
   <section class="section" aria-labelledby="faq-title">
-    <div class="container layout">
+    <div class="container">
       <div class="faq">
         <h2 id="faq-title">Frequently asked questions</h2>
         <div class="faq-list">
@@ -55,44 +54,6 @@ const betaMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Issue
           }
         </div>
       </div>
-
-      <aside id="beta" class="beta" aria-labelledby="beta-title">
-        <p class="eyebrow"><Glyph name="moon" class="g" /> TestFlight beta</p>
-        <h2 id="beta-title">Want in early?</h2>
-        <p>
-          Trust Issues is out on the App Store, and the beta on Apple’s TestFlight carries on. Testers get new builds first and a direct line to
-          the developer.
-        </p>
-        {
-          TESTFLIGHT_URL ? (
-            <Fragment>
-              <ol>
-                <li>Install Apple’s free TestFlight app on your iPhone.</li>
-                <li>Open the invite link below on that iPhone and tap Accept.</li>
-                <li>Install Trust Issues from TestFlight and round up three friends.</li>
-              </ol>
-              <a class="btn btn-primary" href={TESTFLIGHT_URL} rel="noopener">
-                Join the TestFlight beta <Glyph name="arrow" />
-              </a>
-            </Fragment>
-          ) : (
-            <Fragment>
-              <ol>
-                <li>
-                  Email <a href={betaMail}>{SITE.email}</a> and ask for a TestFlight invite. Mention the email address you use for your Apple
-                  Account.
-                </li>
-                <li>Install Apple’s free TestFlight app on your iPhone.</li>
-                <li>Accept the invite, install Trust Issues and round up three friends.</li>
-              </ol>
-              <a class="btn btn-primary" href={betaMail}>
-                Email for an invite <Glyph name="arrow" />
-              </a>
-            </Fragment>
-          )
-        }
-        <p class="fine">Beta builds can be rough around the edges. Bug reports are extremely welcome.</p>
-      </aside>
     </div>
   </section>
 </BaseLayout>
@@ -137,11 +98,9 @@ const betaMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Issue
   .note {
     color: var(--text-secondary);
   }
-  .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    gap: clamp(2rem, 1rem + 4vw, 4.5rem);
-    align-items: start;
+  /* Full-width column now that the FAQ has the section to itself; capped for line length. */
+  .faq {
+    max-width: 52rem;
   }
   .faq h2 {
     font-size: var(--step-3);
@@ -186,61 +145,5 @@ const betaMail = `mailto:${SITE.email}?subject=${encodeURIComponent('Trust Issue
   details p {
     padding: 0 1.2rem 1.2rem;
     color: var(--text-secondary);
-  }
-  .beta {
-    position: sticky;
-    top: calc(var(--header-h) + 1.5rem);
-    padding: 1.75rem;
-    border-radius: var(--radius-sheet);
-    background:
-      radial-gradient(18rem 12rem at 100% 0%, rgb(167 139 250 / 0.22), transparent 70%),
-      var(--bg-night-raised);
-    box-shadow: inset 0 0 0 1px rgb(167 139 250 / 0.3);
-    display: grid;
-    gap: 1rem;
-    scroll-margin-top: calc(var(--header-h) + 1.5rem);
-  }
-  .beta :global(.g) {
-    width: 1.1em;
-    height: 1.1em;
-  }
-  .beta h2 {
-    font-size: var(--step-3);
-  }
-  .beta p,
-  .beta ol {
-    color: var(--text-secondary);
-  }
-  .beta ol {
-    margin: 0;
-    padding-left: 1.25rem;
-    display: grid;
-    gap: 0.5rem;
-  }
-  .beta ol li::marker {
-    color: var(--accent-primary);
-    font-weight: 800;
-  }
-  .beta .btn {
-    justify-self: start;
-  }
-  .beta .btn :global(svg) {
-    width: 1.1rem;
-  }
-  .fine {
-    font-size: var(--step--1);
-  }
-  .beta:target {
-    box-shadow:
-      inset 0 0 0 2px var(--accent-primary),
-      0 0 40px -10px rgb(167 139 250 / 0.6);
-  }
-  @media (max-width: 900px) {
-    .layout {
-      grid-template-columns: 1fr;
-    }
-    .beta {
-      position: static;
-    }
   }
 </style>

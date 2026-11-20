@@ -24,14 +24,6 @@ export const SITE = {
 } as const;
 
 /**
- * Public TestFlight invite link. While `null`, the "Join the TestFlight beta"
- * CTA points to /support/#beta (email for an invite). Paste the
- * https://testflight.apple.com/join/XXXXXXXX link here and every beta CTA
- * links straight to it.
- */
-export const TESTFLIGHT_URL: string | null = null;
-
-/**
  * App Store listing URL (live since 2026-11-20). The primary CTA links here
  * and the MobileApplication JSON-LD uses it as the install/download URL.
  * Setting it back to `null` reverts the CTA to a non-link "Coming soon" pill
@@ -52,5 +44,4 @@ export const NAV = [
   { href: '/privacy/', label: 'Privacy' },
 ] as const;
 
-export const betaHref = TESTFLIGHT_URL ?? '/support/#beta';
 export const absoluteUrl = (path: string) => new URL(path, SITE.url).toString();
