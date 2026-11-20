@@ -1,8 +1,9 @@
 ---
 /**
  * Primary + secondary calls to action.
- * - Primary: "Coming soon on the App Store" — a styled NON-link badge until
- *   APP_STORE_URL is set in src/config.ts. Deliberately not Apple's badge artwork.
+ * - Primary: "Download on the App Store" link to APP_STORE_URL (src/config.ts).
+ *   Falls back to a NON-link "Coming soon" badge if that is ever `null`.
+ *   Deliberately not Apple's badge artwork.
  * - Secondary: TestFlight beta → TESTFLIGHT_URL, or /support/#beta while null.
  */
 import Glyph from './Glyph.astro';

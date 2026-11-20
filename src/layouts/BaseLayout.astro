@@ -3,7 +3,7 @@ import '../styles/global.css';
 import nunitoWoff2 from '@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE, absoluteUrl } from '../config';
+import { APP_STORE_ID, SITE, absoluteUrl } from '../config';
 import type { JsonLd } from '../lib/jsonld';
 
 interface Props {
@@ -32,8 +32,7 @@ const ogImage = absoluteUrl(SITE.ogImage);
     <script is:inline>document.documentElement.classList.add('js');</script>
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content={SITE.themeColor} />
-    {/* TODO(launch): Smart App Banner — set APP_STORE_ID in src/config.ts, then uncomment:
-    <meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} /> */}
+    {APP_STORE_ID && <meta name="apple-itunes-app" content={`app-id=${APP_STORE_ID}`} />}
 
     <link rel="preload" href={nunitoWoff2} as="font" type="font/woff2" crossorigin />
 

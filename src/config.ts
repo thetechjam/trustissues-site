@@ -32,18 +32,17 @@ export const SITE = {
 export const TESTFLIGHT_URL: string | null = null;
 
 /**
- * App Store listing URL. While `null`, the primary CTA renders as a
- * non-link "Coming soon on the App Store" badge. Set it at launch
- * (e.g. 'https://apps.apple.com/app/id0000000000').
+ * App Store listing URL (live since 2026-11-20). The primary CTA links here
+ * and the MobileApplication JSON-LD uses it as the install/download URL.
+ * Setting it back to `null` reverts the CTA to a non-link badge.
  */
-export const APP_STORE_URL: string | null = null;
+export const APP_STORE_URL: string | null = 'https://apps.apple.com/us/app/trust-issues-booj-game/id6788814599';
 
 /**
- * TODO(launch): Smart App Banner. Once the App Store id exists, set it here
- * and uncomment the <meta name="apple-itunes-app"> tag in BaseLayout.astro:
- *   <meta name="apple-itunes-app" content="app-id=0000000000" />
+ * Numeric App Store id. Drives the Smart App Banner
+ * (<meta name="apple-itunes-app">) in BaseLayout.astro; omitted while `null`.
  */
-export const APP_STORE_ID: string | null = null;
+export const APP_STORE_ID: string | null = '6788814599';
 
 export const NAV = [
   { href: '/#how-it-plays', label: 'How it plays' },

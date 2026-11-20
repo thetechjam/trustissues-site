@@ -29,7 +29,7 @@ export const FAQ: Faq[] = [
   {
     id: 'price',
     q: 'Is it free?',
-    a: 'Pricing will be announced at launch. During the beta, Trust Issues is free to test through Apple’s TestFlight app. The current build has no ads and no in-app purchases.',
+    a: 'Yes. Trust Issues is a free download on the App Store, with no ads and no in-app purchases.',
   },
   {
     id: 'requirements',

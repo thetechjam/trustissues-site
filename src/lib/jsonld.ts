@@ -1,4 +1,4 @@
-import { SITE, absoluteUrl } from '../config';
+import { APP_STORE_URL, SITE, absoluteUrl } from '../config';
 
 export type JsonLd = Record<string, unknown>;
 
@@ -23,7 +23,7 @@ export const website = (): JsonLd => ({
   inLanguage: 'en',
 });
 
-/** No offers/aggregateRating until the app is actually on the App Store. */
+/** No aggregateRating: don't claim ratings the page doesn't show. Free download (v1). */
 export const mobileApp = (): JsonLd => ({
   '@context': 'https://schema.org',
   '@type': 'MobileApplication',
@@ -36,6 +36,13 @@ export const mobileApp = (): JsonLd => ({
   operatingSystem: `iOS ${SITE.minIOS} or later`,
   applicationCategory: 'GameApplication',
   genre: 'Party game, Social deduction',
+  ...(APP_STORE_URL
+    ? {
+        installUrl: APP_STORE_URL,
+        downloadUrl: APP_STORE_URL,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', url: APP_STORE_URL },
+      }
+    : {}),
   author: { '@id': `${SITE.url}/#org` },
   publisher: { '@id': `${SITE.url}/#org` },
 });

@@ -34,10 +34,9 @@ npm run og        # regenerate public/og.png (needs `npx playwright install chro
 
 ## Deploy
 
-Netlify (not yet created). Build `npm run build`, publish `dist`, Node 24 — all in
+Netlify, auto-deploying from `main`. Live at https://trustissues.thetechjam.com (custom domain)
+and https://trustissues.netlify.app. Build `npm run build`, publish `dist`, Node 24 — all in
 `netlify.toml`, which also sets security headers and immutable caching for `/_astro/*`.
-Domain plan: add a `CNAME` record `trustissues` → `<site>.netlify.app` at Squarespace DNS
-(thetechjam.com), then add the custom domain in Netlify. Not set up yet.
 
 CI: `.github/workflows/ci.yml` runs `npm ci`, `npm run check`, `npm run build` on every push/PR.
 
@@ -46,12 +45,14 @@ CI: `.github/workflows/ci.yml` runs `npm ci`, `npm run check`, `npm run build` o
 - `TESTFLIGHT_URL` — `null` today, so "Join the TestFlight beta" goes to `/support/#beta`
   (email jam@thetechjam.com for an invite). Paste the public `https://testflight.apple.com/join/…`
   link and every beta CTA links straight to it; the support page switches to install steps.
-- `APP_STORE_URL` — `null` today, so the primary CTA is a non-link "Coming soon on the App Store"
-  badge (deliberately not Apple's badge artwork). Set the listing URL at launch and it becomes a link.
-  At that point, consider swapping in Apple's official badge per their marketing guidelines.
-- `APP_STORE_ID` — for the Smart App Banner; uncomment the `apple-itunes-app` meta in
-  `src/layouts/BaseLayout.astro` once set.
-- When pricing is known, update the "Is it free?" answer in `src/data/faq.ts`.
+- `APP_STORE_URL` — set (live since 2026-11-20). The primary CTA is a "Download on the App Store"
+  link (a store-style pill, deliberately not Apple's badge artwork) and the MobileApplication
+  JSON-LD gets `installUrl`/`downloadUrl`/`offers`. If `null`, the CTA reverts to a non-link
+  "Coming soon" badge. Swapping in Apple's official badge per their marketing guidelines is optional.
+- `APP_STORE_ID` — set; drives the Smart App Banner (`apple-itunes-app` meta in
+  `src/layouts/BaseLayout.astro`), omitted while `null`.
+- Pricing: v1 is a free download, no ads, no IAP ("Is it free?" in `src/data/faq.ts`). Update it
+  and the JSON-LD `offers` if that changes.
 
 ## Replacing screenshots
 
@@ -65,8 +66,7 @@ and `alt`/`caption` in `screenshots.ts`. Any slot with `image: null` renders the
 ## Placeholders / open items
 
 - `[STATE]` governing-law placeholder in `src/pages/terms.astro` (highlighted in gold on the page).
-- `TESTFLIGHT_URL`, `APP_STORE_URL`, `APP_STORE_ID` in `src/config.ts`.
-- Pricing ("announced at launch") in `src/data/faq.ts`.
+- `TESTFLIGHT_URL` in `src/config.ts` (still `null`).
 - Privacy Policy retention section says plainly that online rooms are **not auto-deleted yet**.
   When the app ships TTL/cleanup, update `/privacy/` with the real window (see `docs/privacy-audit/PRIVACY_AUDIT.md` §5 in the private trust-issues repo).
 
