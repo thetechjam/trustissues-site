@@ -34,7 +34,8 @@ export const TESTFLIGHT_URL: string | null = null;
 /**
  * App Store listing URL (live since 2026-11-20). The primary CTA links here
  * and the MobileApplication JSON-LD uses it as the install/download URL.
- * Setting it back to `null` reverts the CTA to a non-link badge.
+ * Setting it back to `null` reverts the CTA to a non-link "Coming soon" pill
+ * (Apple's official badge is only shown while this is set).
  */
 export const APP_STORE_URL: string | null = 'https://apps.apple.com/us/app/trust-issues-booj-game/id6788814599';
 

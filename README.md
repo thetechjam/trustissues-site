@@ -45,10 +45,11 @@ CI: `.github/workflows/ci.yml` runs `npm ci`, `npm run check`, `npm run build` o
 - `TESTFLIGHT_URL` — `null` today, so "Join the TestFlight beta" goes to `/support/#beta`
   (email jam@thetechjam.com for an invite). Paste the public `https://testflight.apple.com/join/…`
   link and every beta CTA links straight to it; the support page switches to install steps.
-- `APP_STORE_URL` — set (live since 2026-11-20). The primary CTA is a "Download on the App Store"
-  link (a store-style pill, deliberately not Apple's badge artwork) and the MobileApplication
-  JSON-LD gets `installUrl`/`downloadUrl`/`offers`. If `null`, the CTA reverts to a non-link
-  "Coming soon" badge. Swapping in Apple's official badge per their marketing guidelines is optional.
+- `APP_STORE_URL` — set (live since 2026-11-20). The primary CTA is Apple's official white
+  "Download on the App Store" badge (vendored unmodified in `src/assets/badges/`, see the README
+  there) linking to this URL, and the MobileApplication JSON-LD gets
+  `installUrl`/`downloadUrl`/`offers`. If `null`, the CTA reverts to a non-link "Coming soon"
+  pill in the site's own tokens (no Apple artwork).
 - `APP_STORE_ID` — set; drives the Smart App Banner (`apple-itunes-app` meta in
   `src/layouts/BaseLayout.astro`), omitted while `null`.
 - Pricing: v1 is a free download, no ads, no IAP ("Is it free?" in `src/data/faq.ts`). Update it

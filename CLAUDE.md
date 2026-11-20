@@ -40,7 +40,12 @@ Static Astro 7 site for the Trust Issues iOS app (app repo: `~/Projects/trust-is
 - Tap targets ≥ 44px; buttons follow §5 (primary violet with `#0B0E1A` label, secondary violet @15%).
 - Voice: "playful-modern with a dark edge… sly, not spooky." Wry, never cruel, no gore. Lift
   lines from `Trust Issues/Game/NarratorCopy.swift` where possible.
-- Never use Apple's App Store badge artwork or the Apple logo while the app is unreleased.
+- Never use Apple's App Store badge artwork or the Apple logo while the app is unreleased. Now
+  that it's live, the primary CTA uses Apple's official **white** "Download on the App Store"
+  badge, vendored byte-for-byte in `src/assets/badges/` (source URLs in the README there). Never
+  edit or optimize those SVGs. CSS may only size, align and space the badge (≥ 40px tall, clear
+  space ≥ 1/4 of its height): no shadows, filters, borders or backgrounds. Don't show the black
+  variant on this dark site.
 
 ## Images
 

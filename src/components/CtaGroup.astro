@@ -1,12 +1,19 @@
 ---
 /**
  * Primary + secondary calls to action.
- * - Primary: "Download on the App Store" link to APP_STORE_URL (src/config.ts).
- *   Falls back to a NON-link "Coming soon" badge if that is ever `null`.
- *   Deliberately not Apple's badge artwork.
+ * - Primary: Apple's official "Download on the App Store" badge (white,
+ *   US-English, unmodified; see src/assets/badges/README.md) linking to
+ *   APP_STORE_URL (src/config.ts). White is Apple's alternative badge, used
+ *   because the black one disappears on this dark-only site and no other
+ *   store badge appears. Shown at 56px tall (min 40px) with >= 1/4-height
+ *   clear space. CSS may only size/align it: no shadows, filters or borders.
+ *   If APP_STORE_URL is ever `null`, falls back to a NON-link "Coming soon"
+ *   pill in the site's own tokens (never Apple's artwork for an unreleased app).
  * - Secondary: TestFlight beta → TESTFLIGHT_URL, or /support/#beta while null.
  */
 import Glyph from './Glyph.astro';
+// `?url` emits the official SVG byte-for-byte (no Astro SVG component processing).
+import appStoreBadge from '../assets/badges/download-on-the-app-store-white-en-us.svg?url';
 import { APP_STORE_URL, TESTFLIGHT_URL, betaHref } from '../config';
 
 interface Props {
@@ -14,17 +21,16 @@ interface Props {
 }
 const { align = 'start' } = Astro.props;
 const external = TESTFLIGHT_URL !== null;
+// Official artwork is 119.66407 x 40; scale uniformly to 56px tall.
+const BADGE_H = 56;
+const BADGE_W = Math.round((BADGE_H * 119.66407) / 40);
 ---
 
 <div class:list={['cta-group', align]}>
   {
     APP_STORE_URL ? (
-      <a class="store-badge live" href={APP_STORE_URL}>
-        <Glyph name="phone" class="badge-icon" />
-        <span>
-          <small>Download on the</small>
-          App Store
-        </span>
+      <a class="app-store-badge" href={APP_STORE_URL}>
+        <img src={appStoreBadge} alt="Download on the App Store" width={BADGE_W} height={BADGE_H} decoding="async" />
       </a>
     ) : (
       <p class="store-badge" role="note">
@@ -46,8 +52,21 @@ const external = TESTFLIGHT_URL !== null;
   .cta-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    /* >= 14px (1/4 of the 56px badge height): Apple's minimum clear space. */
+    gap: 1rem;
     align-items: center;
+  }
+  /* Apple badge: size and alignment only. Never filters/shadows/borders/backgrounds. */
+  .app-store-badge {
+    display: inline-flex;
+    flex: none;
+    line-height: 0;
+  }
+  .app-store-badge img {
+    display: block;
+    width: auto;
+    height: 56px;
+    max-width: none;
   }
   .cta-group.center {
     justify-content: center;
@@ -60,7 +79,7 @@ const external = TESTFLIGHT_URL !== null;
     min-height: 56px;
     padding: 0.55rem 1.25rem 0.55rem 1rem;
     border-radius: var(--radius-control);
-    /* Not Apple's badge artwork: a store-style pill in the app's own tokens. */
+    /* Pre-launch fallback only. Not Apple's artwork: a pill in the app's own tokens. */
     background: linear-gradient(180deg, #05060c, #0b0e1a);
     color: var(--text-primary);
     font-family: var(--font-rounded);
@@ -81,9 +100,6 @@ const external = TESTFLIGHT_URL !== null;
     text-transform: uppercase;
     color: var(--accent-moon);
   }
-  .store-badge.live {
-    cursor: pointer;
-  }
   .store-badge :global(.badge-icon) {
     color: var(--accent-primary);
   }
@@ -96,7 +112,10 @@ const external = TESTFLIGHT_URL !== null;
     min-height: 56px;
   }
   @media (max-width: 420px) {
-    .cta-group > * {
+    .cta-group {
+      justify-content: center;
+    }
+    .cta-group > :not(.app-store-badge) {
       width: 100%;
       justify-content: center;
     }
