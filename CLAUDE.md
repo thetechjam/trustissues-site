@@ -24,7 +24,7 @@ Static Astro 7 site for the Trust Issues iOS app (app repo: `~/Projects/trust-is
 | `src/components/Glyph.astro` | Original SVG stand-ins for the app's SF Symbols (one per concept) |
 | `scripts/build-og.mjs`, `scripts/build-icons.mjs` | Regenerate `public/og.png` and favicons |
 | `scripts/shoot.mjs` | Playwright full-page screenshots for visual QA |
-| `PRIVACY_AUDIT.md`, `APP_PRIVACY_NOTES.md` | Internal privacy audit + App Store label guide |
+| `~/Projects/trust-issues/docs/privacy-audit/` | Internal privacy audit + App Store label guide (`PRIVACY_AUDIT.md`, `APP_PRIVACY_NOTES.md`; kept in the private app repo) |
 
 ## Design rules (from `~/Projects/trust-issues/design/design-system.md`)
 
@@ -52,11 +52,11 @@ Static Astro 7 site for the Trust Issues iOS app (app repo: `~/Projects/trust-is
 
 ## Legal pages must match the code
 
-`/privacy/`, `/terms/` and the FAQ must stay consistent with `PRIVACY_AUDIT.md`, which is
+`/privacy/`, `/terms/` and the FAQ must stay consistent with the app repo's `docs/privacy-audit/PRIVACY_AUDIT.md`, which is
 derived from the app's code (code wins over the app's README/SUBMISSION.md). **Re-run the
 audit whenever the app adds an SDK, a Firestore field, a permission, analytics, IAP, or a
 retention/cleanup mechanism**, then update `/privacy/`, `src/data/faq.ts`, and
-`APP_PRIVACY_NOTES.md`. Never state a retention period the code doesn't implement. Bump the
+`docs/privacy-audit/APP_PRIVACY_NOTES.md` (in the app repo). Never state a retention period the code doesn't implement. Bump the
 effective date when the policy changes.
 
 ## Verify checklist (before every commit)

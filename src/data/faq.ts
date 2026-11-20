@@ -1,6 +1,6 @@
 /**
  * Support FAQ — single source for /support/ (accordions + FAQPage JSON-LD)
- * and the home-page teaser. Answers must stay consistent with PRIVACY_AUDIT.md
+ * and the home-page teaser. Answers must stay consistent with the app repo's docs/privacy-audit/PRIVACY_AUDIT.md
  * and the app's engine (min players, roles, min iOS). Plain text only: the
  * same strings feed JSON-LD.
  */

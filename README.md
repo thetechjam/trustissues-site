@@ -68,10 +68,10 @@ and `alt`/`caption` in `screenshots.ts`. Any slot with `image: null` renders the
 - `TESTFLIGHT_URL`, `APP_STORE_URL`, `APP_STORE_ID` in `src/config.ts`.
 - Pricing ("announced at launch") in `src/data/faq.ts`.
 - Privacy Policy retention section says plainly that online rooms are **not auto-deleted yet**.
-  When the app ships TTL/cleanup, update `/privacy/` with the real window (see `PRIVACY_AUDIT.md` §5).
+  When the app ships TTL/cleanup, update `/privacy/` with the real window (see `docs/privacy-audit/PRIVACY_AUDIT.md` §5 in the private trust-issues repo).
 
 ## Internal docs
 
-- `PRIVACY_AUDIT.md` — code-level audit of the app's data handling (source of truth for legal pages).
-- `APP_PRIVACY_NOTES.md` — how to fill in App Store Connect → App Privacy, age rating notes, pre-submission fixes.
+- The privacy audit (`PRIVACY_AUDIT.md`, source of truth for legal pages) and App Store privacy notes
+  (`APP_PRIVACY_NOTES.md`) live in the private app repo under `trust-issues/docs/privacy-audit/`.
 - `CLAUDE.md` — conventions for agents working on this repo.
