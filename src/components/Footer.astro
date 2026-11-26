@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import appIcon from '../assets/images/app-icon.png';
+import missumaiBadge from '../assets/badges/missumai-featured-dark.svg?url&no-inline';
 import { SITE } from '../config';
 ---
 
@@ -12,6 +13,14 @@ import { SITE } from '../config';
         <span>Trust Issues</span>
       </a>
       <p class="narrator">Everyone woke up. Suspiciously wholesome.</p>
+      <!-- Third-party "Featured on" badge: MissumAI's dark.svg vendored byte-for-byte in
+           src/assets/badges/ and imported with ?url&no-inline (emitted as a same-origin file, never
+           hot-linked or inlined), so the page makes no request to MissumAI.
+           Kept in the footer, away from the App Store badge (the only download CTA) and its clear space.
+           CSS may only size/align/space it: no filters, shadows, borders or backgrounds. -->
+      <div class="featured">
+        <a href="https://missumai.com/p/trust-issues"><img src={missumaiBadge} alt="Featured on MissumAI" width="176" height="48" loading="lazy" decoding="async"></a>
+      </div>
     </div>
     <nav aria-label="Footer">
       <ul>
@@ -61,6 +70,19 @@ import { SITE } from '../config';
     margin-top: 0.75rem;
     font-size: 1.05rem;
     color: var(--text-secondary);
+  }
+  .featured {
+    margin-top: 1.25rem;
+  }
+  .featured a {
+    display: block;
+    width: fit-content;
+  }
+  .featured img {
+    display: block;
+    width: 176px;
+    height: 48px;
+    max-width: none;
   }
   ul {
     list-style: none;
