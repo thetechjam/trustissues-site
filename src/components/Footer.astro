@@ -12,6 +12,12 @@ import { SITE } from '../config';
         <span>Trust Issues</span>
       </a>
       <p class="narrator">Everyone woke up. Suspiciously wholesome.</p>
+      <!-- Third-party "Featured on" badge: markup exactly as MissumAI provides it (remote dark.svg).
+           Kept in the footer, away from the App Store badge (the only download CTA) and its clear space.
+           CSS may only size/align/space it: no filters, shadows, borders or backgrounds. -->
+      <div class="featured">
+        <a href="https://missumai.com/p/trust-issues"><img src="https://missumai.com/badge/dark.svg" alt="Featured on MissumAI" width="176" height="48"></a>
+      </div>
     </div>
     <nav aria-label="Footer">
       <ul>
@@ -61,6 +67,19 @@ import { SITE } from '../config';
     margin-top: 0.75rem;
     font-size: 1.05rem;
     color: var(--text-secondary);
+  }
+  .featured {
+    margin-top: 1.25rem;
+    line-height: 0;
+  }
+  .featured a {
+    display: inline-flex;
+  }
+  .featured img {
+    display: block;
+    width: 176px;
+    height: 48px;
+    max-width: none;
   }
   ul {
     list-style: none;
