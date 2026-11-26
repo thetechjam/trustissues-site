@@ -22,3 +22,16 @@ unchanged. Usage rules (Apple Marketing Guidelines): at least 40px tall onscreen
 clear space of at least 1/4 of the badge height, scale uniformly, and never recolor, crop,
 angle, animate, or add shadows, filters or borders. Only use it while the app is actually live
 on the App Store.
+
+## MissumAI "Featured on" badge (third-party, unmodified)
+
+`missumai-featured-dark.svg` is MissumAI's dark "Featured on MissumAI" badge, downloaded on
+2026-11-26 from https://missumai.com/badge/dark.svg and committed byte-for-byte (same rules as
+above: do not edit, reformat or run SVGO on it; to update, re-download from that URL).
+
+SHA-256: `e24692a5cc63de7a5696a4aaa1b8a2414ef89c0a8c426edd74248586f16ab70a`
+
+`src/components/Footer.astro` imports it with `?url&no-inline` (`no-inline` because Vite would
+otherwise inline this <4 KB file as a data URI; the build emits it unchanged as a same-origin
+file, so the page makes no request to missumai.com) and links it to https://missumai.com/p/trust-issues. It is not a download CTA
+and stays in the footer, away from the App Store badge and its clear space.
